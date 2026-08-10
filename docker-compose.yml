@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mysql
+    ports:
+      - 3306:3306 
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PORT: 3306
+    volumes:
+      - my-datavolume:/var/lib/mysql
+
+  
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+
+  ingestion:
+    build:
+      context: .
+      dockerfile: dockerfile.ingestion
+    environment:
+        MYSQL_HOST: db
+        MYSQL_PORT: 3306
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+    depends_on:
+        - db
+
+volumes:
+  my-datavolume:
