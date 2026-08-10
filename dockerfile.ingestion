@@ -6,8 +6,8 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ingestion/ORM.py .
-COPY ingestion/ingest.py .
-COPY datas/commandes_clean.csv .
+COPY ingestion/ORM.py ./ingestion/ORM.py 
+COPY ingestion/ingest.py ./ingestion/ingest.py
+COPY datas/commandes_clean.csv ./datas/commandes_clean.csv
 
-CMD ["python", "ingest.py"]
+CMD ["python", "-m", "ingestion.ingest"]
